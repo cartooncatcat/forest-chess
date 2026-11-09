@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1d3d34">
+  <title>Forest Kingdom Chess</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <div class="stars"></div>
+    <div class="stars stars-b"></div>
+  </div>
+
+  <header class="topbar">
+    <button id="sound-btn" class="sound-btn" type="button" aria-pressed="true">🔊 Sound</button>
+  </header>
+
+  <main id="app">
+    <section id="screen-start" class="screen">
+      <div class="mascot" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <ellipse cx="60" cy="108" rx="28" ry="6" fill="rgba(0,0,0,.18)"/>
+          <polygon points="38,34 46,14 54,32" fill="#ffe08a" stroke="#c2410c" stroke-width="3" stroke-linejoin="round"/>
+          <polygon points="52,32 60,10 68,32" fill="#fff3c4" stroke="#c2410c" stroke-width="3" stroke-linejoin="round"/>
+          <polygon points="66,32 74,14 82,34" fill="#ffe08a" stroke="#c2410c" stroke-width="3" stroke-linejoin="round"/>
+          <circle cx="60" cy="64" r="32" fill="#f48c06"/>
+          <circle cx="28" cy="58" r="10" fill="#f48c06"/>
+          <circle cx="92" cy="58" r="10" fill="#f48c06"/>
+          <circle cx="60" cy="66" r="24" fill="#ffc857" stroke="#c2410c" stroke-width="3"/>
+          <circle cx="50" cy="62" r="5.5" fill="#243047"/>
+          <circle cx="70" cy="62" r="5.5" fill="#243047"/>
+          <circle cx="52" cy="60" r="2" fill="#fff"/>
+          <circle cx="72" cy="60" r="2" fill="#fff"/>
+          <ellipse cx="60" cy="74" rx="6" ry="4.5" fill="#e76f51"/>
+          <path d="M52 78 Q60 86 68 78" fill="none" stroke="#243047" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="44" cy="72" r="3" fill="#ff8fa3" opacity=".8"/>
+          <circle cx="76" cy="72" r="3" fill="#ff8fa3" opacity=".8"/>
+        </svg>
+      </div>
+      <h1>Forest Kingdom</h1>
+      <p class="subtitle">Chess</p>
+      <div class="big-actions">
+        <button id="btn-two" class="big-btn sun" type="button">Two kids play</button>
+        <button id="btn-ai" class="big-btn moon" type="button">Play the computer</button>
+      </div>
+    </section>
+
+    <section id="screen-level" class="screen hidden">
+      <h2>Pick a friend</h2>
+      <p class="subtitle">Level 1 is easiest. Level 10 is strongest.</p>
+      <div id="level-grid" class="level-grid"></div>
+      <div class="big-actions">
+        <button id="btn-human-first" class="big-btn sun" type="button" disabled>I go first</button>
+        <button id="btn-ai-first" class="big-btn moon" type="button" disabled>Computer goes first</button>
+      </div>
+      <button id="btn-level-back" class="text-btn" type="button">Back</button>
+    </section>
+
+    <section id="screen-play" class="screen play hidden">
+      <div class="board-slot">
+        <div class="board-frame">
+          <div id="board" class="board" role="grid" aria-label="Chessboard"></div>
+        </div>
+        <div id="think-badge" class="think-badge hidden">
+          <span class="think-face" aria-hidden="true">🤔</span>
+          <span>Thinking…</span>
+        </div>
+      </div>
+      <aside class="panel">
+        <h2 class="panel-title">Forest Kingdom</h2>
+        <div id="status" class="status" aria-live="polite">White's turn</div>
+        <p id="note" class="note"></p>
+        <div class="controls">
+          <button id="btn-hint" type="button">Hint</button>
+          <button id="btn-undo" type="button">Undo</button>
+          <button id="btn-again" type="button">Play again</button>
+          <button id="btn-back" type="button">Back</button>
+        </div>
+      </aside>
+      <div id="promo" class="promo hidden">
+        <div class="promo-card">
+          <p>Promotion! Pick a new piece</p>
+          <div id="promo-choices" class="promo-choices"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="bursts" class="bursts" aria-hidden="true"></div>
+  <script src="script.js"></script>
+</body>
+</html>
