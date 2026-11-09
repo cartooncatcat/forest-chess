@@ -14,7 +14,21 @@
   </div>
 
   <header class="topbar">
-    <button id="sound-btn" class="sound-btn" type="button" aria-pressed="true">🔊 Sound</button>
+    <div class="audio-group">
+      <label class="vol">
+        <span>Effects</span>
+        <input id="vol-slider" type="range" min="0" max="100" value="60" aria-label="Sound effect volume">
+      </label>
+      <button id="sound-btn" class="sound-btn" type="button" aria-pressed="true">🔊 Sound</button>
+      <label class="vol">
+        <span>Music</span>
+        <input id="music-slider" type="range" min="0" max="100" value="22" aria-label="Music volume">
+      </label>
+      <button id="jazz-btn" class="sound-btn" type="button" aria-pressed="false">Jazz off</button>
+      <button id="random-btn" class="sound-btn" type="button">Random</button>
+    </div>
+    <button id="full-btn" class="sound-btn" type="button" aria-pressed="false">Full screen</button>
+    <p id="music-credit" class="music-credit">Kevin MacLeod · CC BY 4.0</p>
   </header>
 
   <main id="app">

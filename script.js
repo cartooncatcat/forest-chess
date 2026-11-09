@@ -675,45 +675,67 @@
     return chosen;
   }
 
+  let pieceSerial = 0;
+
   function pieceSvg(type, color) {
+    const id = "pc" + (pieceSerial++);
     const white = color === "w";
-    const fill = white ? "#F7F7F5" : "#161616";
+    const hi = white ? "#FFFFFF" : "#6E6E6E";
+    const mid = white ? "#F4F1EA" : "#2A2A2A";
+    const lo = white ? "#B7B1A4" : "#050505";
     const stroke = white ? "#1A1A1A" : "#F4F1EA";
-    const cut = stroke;
-    const pen = 'fill="' + fill + '" stroke="' + stroke + '" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" paint-order="stroke fill"';
-    let shape = "";
+    const shine = white ? "0.4" : "0.22";
+    const shadeOp = white ? "0.22" : "0.5";
+    let d = "";
+    let marks = "";
     if (type === "k") {
-      shape =
-        '<rect ' + pen + ' x="35" y="2" width="10" height="32" rx="1.4"/>' +
-        '<rect ' + pen + ' x="27" y="8" width="26" height="10" rx="1.4"/>' +
-        '<path ' + pen + ' d="M22 30H58L54 38L60 58H68V72H12V58H20L26 38Z"/>';
+      d = "M18 74H62V66H54L56 54L50 42L46 34L44 26V18H54V10H44V4H36V10H26V18H36V26L34 34L30 42L24 54L26 66H18Z";
     } else if (type === "q") {
-      shape =
-        '<path ' + pen + ' d="M14 72H66V62H58L52 44L62 36L54 16L46 30L40 8L34 30L26 16L18 36L28 44L22 62H14Z"/>';
+      d = "M18 74H62V66H54L56 54L50 44L46 38L54 36L50 22L44 34L40 14L36 34L30 22L26 36L34 38L30 44L24 54L26 66H18Z";
     } else if (type === "r") {
-      shape =
-        '<path ' + pen + ' d="M16 14H28V24H34V14H46V24H52V14H64V32H58V46H64V60H70V72H10V60H16V46H22V32H16Z"/>';
+      d = "M16 74V64H22L18 54L24 44L20 36V26H14V14H26V26H34V14H46V26H54V14H66V26H60V36L56 44L62 54L58 64H64V74Z";
     } else if (type === "b") {
-      shape =
-        '<circle ' + pen + ' cx="40" cy="10" r="6"/>' +
-        '<path ' + pen + ' d="M40 16C52 22 58 34 54 46L58 50H52L56 60H66V72H14V60H24L28 50H22L26 46C22 34 28 22 40 16Z"/>' +
-        '<path fill="' + cut + '" d="M38.7 20H41.3V34H38.7Z"/>';
+      d = "M40 18C36.7 18 34 15.3 34 12C34 8.7 36.7 6 40 6C43.3 6 46 8.7 46 12C46 15.3 43.3 18 40 18C52 24 58 36 54 48L58 54H52L56 62H66V74H14V62H24L28 54H22L26 48C22 36 28 24 40 18Z";
+      marks = '<path fill="' + stroke + '" d="M38.6 24H41.4V40H38.6Z"/>';
     } else if (type === "n") {
-      shape =
-        '<path ' + pen + ' d="M18 70L14 50L26 32L24 16L36 6L44 16L54 14L70 26L72 38L58 42L66 56L50 70L32 64Z"/>' +
-        '<circle fill="' + cut + '" cx="58" cy="30" r="2.2"/>';
+      d = "M24 74H60V66L66 56L56 50L62 40L58 28L50 16L44 4L40 16L34 14L18 26L14 34L24 38L20 46L28 58L24 66Z";
+      marks = '<circle fill="' + stroke + '" cx="32" cy="26" r="2.3"/>';
     } else {
-      shape =
-        '<path ' + pen + ' d="M22 72L32 58Q26 50 31 36A12 12 0 1 1 49 36Q54 50 48 58L58 72Z"/>';
+      d = "M24 74H56V66H48Q54 54 46 48A16 16 0 1 0 34 48Q26 54 32 66H24Z";
     }
     const flip = color === "b" && type === "n" ? ' transform="translate(80 0) scale(-1 1)"' : "";
-    return '<svg viewBox="0 0 80 80" aria-hidden="true"><g' + flip + ">" + shape + "</g></svg>";
+    return '<svg viewBox="0 0 80 80" aria-hidden="true"><defs>' +
+      '<linearGradient id="' + id + 'g" x1="8%" y1="0%" x2="92%" y2="100%">' +
+      '<stop offset="0%" stop-color="' + hi + '"/>' +
+      '<stop offset="42%" stop-color="' + mid + '"/>' +
+      '<stop offset="100%" stop-color="' + lo + '"/></linearGradient>' +
+      '<clipPath id="' + id + 'c"' + flip + '><path d="' + d + '"/></clipPath></defs>' +
+      '<g' + flip + '>' +
+      '<ellipse cx="40" cy="75.5" rx="20" ry="2.8" fill="rgba(0,0,0,.38)"/>' +
+      '<path fill="url(#' + id + 'g)" stroke="' + stroke + '" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" d="' + d + '"/>' +
+      '<g clip-path="url(#' + id + 'c)">' +
+      '<ellipse cx="27" cy="28" rx="15" ry="24" fill="rgba(255,255,255,' + shine + ')"/>' +
+      '<ellipse cx="55" cy="60" rx="16" ry="18" fill="rgba(0,0,0,' + shadeOp + ')"/>' +
+      '</g>' + marks + '</g></svg>';
   }
+
+  const TRACKS = [
+    { src: "music/night-docks.mp3", title: "Night on the Docks" },
+    { src: "music/lobby-time.mp3", title: "Lobby Time" },
+    { src: "music/shades-spring.mp3", title: "Shades of Spring" },
+    { src: "music/vibing-venus.mp3", title: "Vibing Over Venus" },
+  ];
 
   const sounds = {
     ctx: null,
     master: null,
+    sfx: null,
     muted: false,
+    volume: 0.6,
+    musicVolume: 0.22,
+    musicOn: false,
+    track: 0,
+    audio: null,
     nodes: [],
     hum: null,
     last: "",
@@ -723,10 +745,25 @@
       if (!this.ctx) {
         this.ctx = new AC();
         this.master = this.ctx.createGain();
-        this.master.gain.value = 0.2;
+        this.master.gain.value = 1;
         this.master.connect(this.ctx.destination);
+        this.sfx = this.ctx.createGain();
+        this.sfx.gain.value = this.volume * 0.35;
+        this.sfx.connect(this.master);
       }
       if (this.ctx.state === "suspended") this.ctx.resume();
+    },
+    setVolume(percent) {
+      const n = Math.max(0, Math.min(100, Number(percent) || 0));
+      this.volume = n / 100;
+      if (this.sfx) this.sfx.gain.value = this.volume * 0.35;
+      try { localStorage.setItem("forest-chess-volume", String(Math.round(n))); } catch (e) { /* ignore */ }
+    },
+    setMusicVolume(percent) {
+      const n = Math.max(0, Math.min(100, Number(percent) || 0));
+      this.musicVolume = n / 100;
+      if (this.audio) this.audio.volume = this.musicVolume;
+      try { localStorage.setItem("forest-chess-music-volume", String(Math.round(n))); } catch (e) { /* ignore */ }
     },
     stopMain() {
       this.nodes.forEach((node) => { try { node.stop(); } catch (e) { /* already stopped */ } });
@@ -738,8 +775,59 @@
       try { this.hum.lfo.stop(); } catch (e) { /* already stopped */ }
       this.hum = null;
     },
+    ensureAudio() {
+      if (this.audio) return;
+      this.audio = new Audio();
+      this.audio.preload = "none";
+      this.audio.volume = this.musicVolume;
+      this.audio.addEventListener("ended", () => {
+        if (this.musicOn && !this.muted) this.playTrack(this.pickTrack());
+      });
+    },
+    pickTrack() {
+      if (TRACKS.length < 2) return 0;
+      let next = this.track;
+      while (next === this.track) next = Math.floor(Math.random() * TRACKS.length);
+      return next;
+    },
+    playTrack(index) {
+      this.ensureAudio();
+      this.track = index;
+      const track = TRACKS[index];
+      this.audio.src = track.src;
+      this.audio.currentTime = 0;
+      const pending = this.audio.play();
+      if (pending && pending.catch) pending.catch(() => { /* wait for a tap */ });
+      if (typeof updateSoundButton === "function") updateSoundButton();
+    },
+    stopJazz() {
+      if (this.audio) this.audio.pause();
+    },
+    startJazz() {
+      this.unlock();
+      if (this.muted || !this.musicOn) return;
+      this.ensureAudio();
+      if (!this.audio.paused && this.audio.src) return;
+      if (!this.audio.src) this.playTrack(this.track);
+      else {
+        const pending = this.audio.play();
+        if (pending && pending.catch) pending.catch(() => { /* wait for a tap */ });
+      }
+    },
+    randomTrack() {
+      this.unlock();
+      this.musicOn = true;
+      try { localStorage.setItem("forest-chess-jazz", "1"); } catch (e) { /* ignore */ }
+      if (this.muted) {
+        this.track = this.pickTrack();
+        if (typeof updateSoundButton === "function") updateSoundButton();
+        return;
+      }
+      this.stopHum();
+      this.playTrack(this.pickTrack());
+    },
     tone(freq, dur, type, gain, delay, slide) {
-      if (!this.ctx || this.muted) return;
+      if (!this.ctx || this.muted || this.volume <= 0) return;
       const t = this.ctx.currentTime + (delay || 0);
       const osc = this.ctx.createOscillator();
       const amp = this.ctx.createGain();
@@ -750,14 +838,14 @@
       amp.gain.exponentialRampToValueAtTime(gain, t + 0.02);
       amp.gain.exponentialRampToValueAtTime(0.0001, t + dur);
       osc.connect(amp);
-      amp.connect(this.master);
+      amp.connect(this.sfx);
       osc.start(t);
       osc.stop(t + dur + 0.02);
       this.nodes.push(osc);
     },
     play(name) {
       this.unlock();
-      if (this.muted || !this.ctx) {
+      if (this.muted || this.volume <= 0 || !this.ctx) {
         this.last = name;
         return;
       }
@@ -803,7 +891,7 @@
     },
     startHum() {
       this.unlock();
-      if (this.muted || !this.ctx) return;
+      if (this.muted || this.musicOn || this.volume <= 0 || !this.ctx) return;
       this.stopMain();
       this.stopHum();
       const o = this.ctx.createOscillator();
@@ -818,7 +906,7 @@
       lfo.connect(lg);
       lg.connect(g.gain);
       o.connect(g);
-      g.connect(this.master);
+      g.connect(this.sfx);
       o.start();
       lfo.start();
       this.hum = { o: o, lfo: lfo, g: g };
@@ -828,6 +916,11 @@
 
   try {
     if (localStorage.getItem("forest-chess-mute") === "1") sounds.muted = true;
+    const savedVol = localStorage.getItem("forest-chess-volume");
+    if (savedVol !== null && savedVol !== "") sounds.volume = Math.max(0, Math.min(100, Number(savedVol) || 0)) / 100;
+    const savedMusic = localStorage.getItem("forest-chess-music-volume");
+    if (savedMusic !== null && savedMusic !== "") sounds.musicVolume = Math.max(0, Math.min(100, Number(savedMusic) || 0)) / 100;
+    if (localStorage.getItem("forest-chess-jazz") === "1") sounds.musicOn = true;
   } catch (e) { /* private mode */ }
 
   const ui = {
@@ -849,7 +942,7 @@
     acceptInputAfter: 0,
   };
 
-  let boardEl, statusEl, noteEl, thinkEl, promoEl, promoChoices, soundBtn;
+  let boardEl, statusEl, noteEl, thinkEl, promoEl, promoChoices, soundBtn, jazzBtn, randomBtn, fullBtn, volSlider, musicSlider, creditEl;
 
   function $(id) { return document.getElementById(id); }
 
@@ -1148,6 +1241,21 @@
     soundBtn.classList.toggle("off", sounds.muted);
     soundBtn.setAttribute("aria-pressed", sounds.muted ? "false" : "true");
     soundBtn.textContent = sounds.muted ? "🔇 Mute" : "🔊 Sound";
+    jazzBtn.classList.toggle("on", sounds.musicOn);
+    jazzBtn.classList.toggle("off", !sounds.musicOn);
+    jazzBtn.setAttribute("aria-pressed", sounds.musicOn ? "true" : "false");
+    jazzBtn.textContent = sounds.musicOn ? "Jazz" : "Jazz off";
+    const track = TRACKS[sounds.track];
+    jazzBtn.title = track.title;
+    creditEl.textContent = "Kevin MacLeod · CC BY 4.0";
+    creditEl.title = track.title + " by Kevin MacLeod (incompetech.com), CC BY 4.0";
+    volSlider.value = String(Math.round(sounds.volume * 100));
+    musicSlider.value = String(Math.round(sounds.musicVolume * 100));
+    const fullOn = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    fullBtn.classList.toggle("on", fullOn);
+    fullBtn.setAttribute("aria-pressed", fullOn ? "true" : "false");
+    fullBtn.textContent = fullOn ? "Exit full screen" : "Full screen";
+    document.body.classList.toggle("is-full", fullOn);
   }
 
   function buildLevels() {
@@ -1176,16 +1284,65 @@
     promoEl = $("promo");
     promoChoices = $("promo-choices");
     soundBtn = $("sound-btn");
+    jazzBtn = $("jazz-btn");
+    randomBtn = $("random-btn");
+    fullBtn = $("full-btn");
+    creditEl = $("music-credit");
+    volSlider = $("vol-slider");
+    musicSlider = $("music-slider");
     buildLevels();
     updateSoundButton();
     soundBtn.addEventListener("click", () => {
       sounds.unlock();
       sounds.muted = !sounds.muted;
       try { localStorage.setItem("forest-chess-mute", sounds.muted ? "1" : "0"); } catch (e) { /* ignore */ }
-      if (sounds.muted) sounds.stopHum();
+      if (sounds.muted) {
+        sounds.stopHum();
+        sounds.stopJazz();
+      } else if (sounds.musicOn) sounds.startJazz();
       else if (ui.thinking) sounds.startHum();
       else sounds.play("tap");
       updateSoundButton();
+    });
+    jazzBtn.addEventListener("click", () => {
+      sounds.unlock();
+      sounds.musicOn = !sounds.musicOn;
+      try { localStorage.setItem("forest-chess-jazz", sounds.musicOn ? "1" : "0"); } catch (e) { /* ignore */ }
+      if (sounds.musicOn && !sounds.muted) {
+        sounds.stopHum();
+        sounds.startJazz();
+      } else {
+        sounds.stopJazz();
+        if (ui.thinking && !sounds.muted) sounds.startHum();
+      }
+      updateSoundButton();
+    });
+    randomBtn.addEventListener("click", () => {
+      sounds.randomTrack();
+      updateSoundButton();
+    });
+    fullBtn.addEventListener("click", () => {
+      sounds.unlock();
+      const root = document.documentElement;
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (active) {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exit) exit.call(document);
+      } else {
+        const ask = root.requestFullscreen || root.webkitRequestFullscreen;
+        if (ask) {
+          const pending = ask.call(root);
+          if (pending && pending.catch) pending.catch(() => { /* this browser cannot go full screen */ });
+        }
+      }
+    });
+    document.addEventListener("fullscreenchange", updateSoundButton);
+    document.addEventListener("webkitfullscreenchange", updateSoundButton);
+    volSlider.addEventListener("input", () => sounds.setVolume(volSlider.value));
+    musicSlider.addEventListener("input", () => sounds.setMusicVolume(musicSlider.value));
+    volSlider.addEventListener("change", () => {
+      sounds.unlock();
+      if (!sounds.muted) sounds.play("tap");
     });
     $("btn-two").addEventListener("click", () => { sounds.play("tap"); beginGame("two", 1, "w"); });
     $("btn-ai").addEventListener("click", () => {
@@ -1232,7 +1389,10 @@
       if (!sq) return;
       onSquare(Number(sq.dataset.r), Number(sq.dataset.c), event.timeStamp);
     });
-    document.addEventListener("pointerdown", () => sounds.unlock(), { once: false });
+    document.addEventListener("pointerdown", () => {
+      sounds.unlock();
+      if (sounds.musicOn && !sounds.muted) sounds.startJazz();
+    }, { once: false });
   }
 
   function playAlg(text) {
